@@ -6,7 +6,8 @@ The current approach will be to use a Sankey diagram to visualize the edits, whi
 be implemented in D3.  The backend will be powered by a rails app that fetches the history data
 via the MediaWiki API.
 
-*Data From Each Edit*
+**Data From Each Edit**
+
 Would like the following:
 
 1.  Timestamp of edit
@@ -20,12 +21,14 @@ Would like the following:
 8.  Summary comment
 9.  Size of the article at that time (to ensure consistency)
 
-Potential Challenges:
+**Potential Challenges**
+
 1.  Getting the data in structured format (may require reformatting)
 2.  Visualizing in a readable way for articles with a large number of edits
 3.  May want to cache data in a smart way, especially for large articles
 
-Questions:
+**Questions**
+
 1.  Do I want to do something interesting with reverted changes?
 2.  What should color represent (type of user -- bot, IP, official user)
 3.  Associate some "controversy index" or measure of activity with this data?
