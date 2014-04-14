@@ -33,3 +33,13 @@ Would like the following:
 2.  What should color represent (type of user -- bot, IP, official user)
 3.  Associate some "controversy index" or measure of activity with this data?
 
+**Revisions API Query**
+
+This returns:
+
+1.  "Revid": revision id
+2.  "parentid": (not sure what this is)
+3.  "user"
+4.  "timestamp"
+5.  "comment"
+6.  "size"
