@@ -8,13 +8,30 @@ class WikiApi
     @base_url = "http://en.wikipedia.org/w/api.php"
   end
 
-  def page_through_results
-    # TODO
+  def fetch_all_results(title)
+    results = []
+    page = 1
+    next_page ||= nil
+    loop do
+      puts "Fetching page #{page} of the results..."
+      puts "Next page: #{next_page}"
+      result = query(title, rvcontinue: next_page)
+      results << result
+      page += 1
+      break if !result.key?('query-continue')
+      next_page = result['query-continue']['revisions']['rvcontinue']
+    end
+    results
   end
 
-  def query title
+  def get_next_page result
+    #TODO
+  end
+
+  # Maybe this shouldn't have so many defaults hardcoded in...
+  def query(title, options={})
     # format the query string
-    options = {
+    default_options = {
       :prop => "revisions",
       :format => "json",
       # :rvlimit => "max",
@@ -24,14 +41,21 @@ class WikiApi
       #              "comment", "size", "content"]
       :rvprop => ["timestamp", "user", "userid", "flags", "ids",
                    "comment", "size", "tags"],
-      :rvcontinue => 415180915
+      # :rvcontinue => 415180915
       # for now going to ignore content altogether...
       # :rvdiffto => "cur",
       # :rvdir => "newer"
     }
+    puts "options = #{options.inspect}"
+    options = default_options.merge(options)
 
     query_url = "#{@base_url}?action=query"
     options.each do |option, arg|
+      # ignore nil values
+      if arg.nil?
+        next
+      end
+
       if arg.class == String || arg.class == Fixnum
         query_url << "&#{option}=#{arg}"
       elsif arg.class == Array
@@ -74,6 +98,8 @@ if __FILE__ == $PROGRAM_NAME
 
   # puts einstein['query'].inspect
   # puts "Number of revisions returned: #{revisions.count}"
+
+  # TODO probably want an intelligent way to pull out this page #...
   example_revisions = einstein["query"]["pages"]["736"]["revisions"]
 
   puts JSON.pretty_generate(example_revisions)
@@ -103,8 +129,10 @@ if __FILE__ == $PROGRAM_NAME
   # *** alternate bulk XML download                       ***
   # *********************************************************
 
-  einstein = wiki_api.query_export_page("Albert_Einstein")
+  # einstein = wiki_api.query_export_page("Albert_Einstein")
+  # puts einstein['mediawiki']['page'].keys
 
-  puts einstein['mediawiki']['page'].keys
+  einstein = wiki_api.fetch_all_results("Albert_Einstein")
 
+  puts einstein.count
 end
