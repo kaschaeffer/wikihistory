@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script type="text/javascript" src="d3.min.js"></script>
+    <script type="text/javascript" src="sankey.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var w = 500;
+      var h = 500;
+
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", w)
+                  .attr("height", h);
+
+      d3.csv('test_data.csv', function (err, response) {
+        // get the list of wikipedia edits
+        var edits = response;
+
+        // bogus example data
+        nodes = [
+        {"node":0, "name": "a"},
+        {"node":1, "name": "b"},
+        {"node":2, "name": "c"},
+        {"node":3, "name": "d"},
+        {"node":4, "name": "e"}
+        ];
+
+        links = [
+        {"source":0,"target":2,"value":2},
+        {"source":1,"target":2,"value":2},
+        {"source":1,"target":3,"value":2},
+        {"source":1,"target":3,"value":2},
+        {"source":0,"target":4,"value":2},
+        {"source":2,"target":3,"value":2},
+        {"source":2,"target":4,"value":2},
+        {"source":3,"target":4,"value":4}
+        ];
+            
+
+        console.log(edits)
+        // this creates the sankey object
+        // but doesn't actually render it!
+        var sankey = d3.sankey()
+        .size([w, h])
+        .nodeWidth(15)
+        .nodePadding(10)
+        .nodes(nodes)
+        .links(links)
+        .layout(32);
+        })
+
+        // seems like I'll need a "custom" sankey
+        // to display the graph the way i'd like
+    </script>
+  </body>
+</html>
